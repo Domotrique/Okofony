@@ -1,0 +1,26 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+
+# legacy #
+#######################
+/legacy/*.csv
+/legacy/config.php
+/legacy/config.json
+/legacy/*@eaDir
+/legacy/@eaDir/
+/legacy/import.csv
+/legacy/matrice.csv
+/legacy/test*
+/legacy/_tmp/*.sql
+/legacy/_tmp/*.txt
+/legacy/php.ini
+/legacy/.c9/

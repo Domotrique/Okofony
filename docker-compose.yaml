@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    container_name: oko-mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MARIADB_USER: ${MYSQL_USER}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - "oko-mariadb:/var/lib/mysql/"
+
+  php:
+    container_name: oko-php
+    build:
+      context: ./docker/php
+      args:
+        - DOCKER_UID
+    volumes:
+      - ".:/var/www:delegated"
+      - "composer-cache:/home/www-data/.composer/cache"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  nginx:
+    container_name: oko-nginx
+    build:
+      context: ./docker/nginx
+      args:
+        - DOCKER_UID
+    volumes:
+      - ".:/var/www"
+      - "./docker/nginx/vhost/:/etc/nginx/conf.d/:ro"
+    ports:
+      - '8080:80'
+    depends_on:
+      - php
+      - mariadb
+
+  maildev:
+    image: maildev/maildev:1.1.1
+
+volumes:
+  oko-mariadb:
+  composer-cache:
